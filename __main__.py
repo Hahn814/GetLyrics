@@ -14,7 +14,7 @@ def get_arg_parser():
     filter_parser.add_argument('--author', default=None, action='append', help='The name of the author')
 
     out_parser = parser.add_argument_group('Output Parameters')
-    out_parser.add_argument('--max_results', default=10, help='Limit the number of results to consider')
+    out_parser.add_argument('--max_results', default=500, help='Limit the number of results to consider')
     out_parser.add_argument('--out', default='genius.csv', help='CSV results file')
 
     return parser
@@ -36,11 +36,11 @@ if __name__ == '__main__':
     author_names = args.author
     max_results = int(args.max_results)
     outfile = env.get_csv_writer(os.path.abspath(args.out), fieldnames=HEADER)
-    genius = lyricsgenius.Genius("HbMKC28lSqkJPwy6HhWfuAbB6aYWyJqy8QSgDh5yhyi6562A1Yk1T96Jqj5JKuM9")
+    genius = lyricsgenius.Genius("nNhT-omaJrPgrGxd4w_qHHWXXUcTdqZMnQ7v_gr5lohgHYlYlm623WgzdjDRikNv")
 
     if author_names:
         for author_name in author_names:
-            artist = genius.search_artist(author_name, max_songs=max_results, sort="title")
+            artist = genius.search_artist(author_name, max_songs=max_results)
             logger.info("Found: {}, Limit: {}".format(len(artist.songs), max_results))
 
             for song in artist.songs:
