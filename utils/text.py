@@ -1,20 +1,29 @@
 import nltk
 from nltk.sentiment import SentimentIntensityAnalyzer
-from utils.environment import env
+from base.environment import env
 
 logger = env.get_logger(context=__name__)
 
 
 class Corpus(object):
 
-    def __init__(self, corpus: str):
+    def __init__(self, corpus=None):
         self.logger = env.get_logger(context=self.__class__.__name__)
-        self.__corpus = corpus
+        self.__corpus = corpus if corpus else ""
         self.__sia = SentimentIntensityAnalyzer()
 
+    def __str__(self):
+        return "{classname} - Lyric Count: {}".format(self.__class__.__name__, len(self.__corpus.split()))
     @property
     def corpus(self):
         return self.__corpus
+
+    @corpus.setter
+    def corpus(self, corpus):
+        if isinstance(corpus, str):
+            self.__corpus = corpus
+        else:
+            raise TypeError("Corpus text must be string, not {}".format(type(corpus)))
 
     def get_average_sentiment_score(self):
         sent_score = 0.0
