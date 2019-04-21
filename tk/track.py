@@ -2,20 +2,15 @@ from base.environment import env
 from utils.text import Corpus
 
 
-class Track(object):
-    __lyrics: Corpus
+class Track(Corpus):
 
     def __init__(self, title, artist, lyrics=None, album=None, year=None):
+        super(Corpus, self).__init__(corpus=lyrics)
         self.logger = env.get_logger(self.__class__.__name__)
         self.__title = title
         self.__artist = artist
         self.__album = album
         self.__year = year
-
-        if not lyrics:
-            lyrics = ""
-
-        self.__lyrics = Corpus(lyrics)
         self.logger.debug("New artist instantiated: {}".format(self))
 
     def __str__(self):
@@ -39,12 +34,12 @@ class Track(object):
 
     @property
     def lyrics(self):
-        return self.__lyrics
+        return self.corpus
 
     @lyrics.setter
     def lyrics(self, lyrics):
-        self.__lyrics.corpus = lyrics
-        self.logger.debug("Updated Track lyrics: {}".format(self.__lyrics))
+        self.corpus = lyrics
+        self.logger.debug("Updated Track lyrics: {}".format(self.lyrics))
 
     @property
     def title(self):
@@ -65,20 +60,6 @@ class Track(object):
         og = self.artist
         self.__artist = artist
         self.logger.debug("Updated artist: '{}' -> '{}'".format(og, self.artist))
-
-    def get_average_sentiment_score(self):
-        """
-        Get the average sentiment score for the associated corpus
-        :rtype: float
-        """
-        return self.__lyrics.get_average_sentiment_score()
-
-    def get_word_count(self):
-        """
-        Get the total number of words in this corpus
-        :rtype: int
-        """
-        return len(self.__lyrics)
 
     def __hash__(self):
         return self.artist, self.title

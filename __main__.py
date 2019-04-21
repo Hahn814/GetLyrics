@@ -1,6 +1,7 @@
 import os
 import argparse
 import lyricsgenius
+from collections import Counter
 from base.environment import env
 from tk.track import Track
 
@@ -42,5 +43,6 @@ if __name__ == '__main__':
             for song in artist.songs:
                 track = Track(title=song.title, lyrics=song.lyrics, artist=song.artist, album=song.album, year=song.year)
                 avg_sentiment_score = track.get_average_sentiment_score()
-                lyric_count = track.get_word_count()
+                lyric_count = len(track)
+                lyric_counter = Counter(track.lyrics.split())
                 outfile.writerow(rowdict=dict(track))
