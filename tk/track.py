@@ -67,7 +67,18 @@ class Track(object):
         self.logger.debug("Updated artist: '{}' -> '{}'".format(og, self.artist))
 
     def get_average_sentiment_score(self):
+        """
+        Get the average sentiment score for the associated corpus
+        :rtype: float
+        """
         return self.__lyrics.get_average_sentiment_score()
+
+    def get_word_count(self):
+        """
+        Get the total number of words in this corpus
+        :rtype: int
+        """
+        return len(self.__lyrics)
 
     def __hash__(self):
         return self.artist, self.title

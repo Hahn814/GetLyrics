@@ -41,5 +41,6 @@ if __name__ == '__main__':
 
             for song in artist.songs:
                 track = Track(title=song.title, lyrics=song.lyrics, artist=song.artist, album=song.album, year=song.year)
-                sentiment_score = track.get_average_sentiment_score()
+                avg_sentiment_score = track.get_average_sentiment_score()
+                lyric_count = track.get_word_count()
                 outfile.writerow(rowdict=dict(track))

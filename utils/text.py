@@ -13,7 +13,11 @@ class Corpus(object):
         self.__sia = SentimentIntensityAnalyzer()
 
     def __str__(self):
-        return "{classname} - Lyric Count: {}".format(self.__class__.__name__, len(self.__corpus.split()))
+        return "{classname} - Lyric Count: {lyriccount}".format(classname=self.__class__.__name__, lyriccount=len(self.__corpus.split()))
+
+    def __len__(self):
+        return len(self.__corpus.split())
+
     @property
     def corpus(self):
         return self.__corpus
