@@ -5,7 +5,7 @@ from utils.text import Corpus
 class Track(Corpus):
 
     def __init__(self, title, artist, lyrics=None, album=None, year=None):
-        super(Corpus, self).__init__(corpus=lyrics)
+        super().__init__(corpus=lyrics)
         self.logger = env.get_logger(self.__class__.__name__)
         self.__title = title
         self.__artist = artist
@@ -79,7 +79,7 @@ class Track(Corpus):
             elif item == 'Year':
                 val = self.year
             elif item == 'Lyric Count':
-                val = len(self.lyrics.corpus.split())
+                val = len(self.corpus.split())
             elif item == 'Sentiment Score':
                 val = self.get_average_sentiment_score()
         else:

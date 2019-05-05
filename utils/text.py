@@ -1,4 +1,5 @@
 import nltk
+from collections import Counter
 from nltk.sentiment import SentimentIntensityAnalyzer
 from base.environment import env
 
@@ -44,3 +45,18 @@ class Corpus(object):
         for sentence in sent_text:
             score = self.__sia.polarity_scores(sentence)
             yield score
+
+    def get_pos_tags(self):
+        tok_txt = nltk.word_tokenize(self.corpus)
+        return nltk.pos_tag(tok_txt)
+
+    def get_most_common(self, tags=False):
+        """
+        Return the most common word/tags in the associated corpus
+        :param tags: Return the most common word/tag pairs
+        :return:
+        """
+        if not tags:
+            return nltk.FreqDist(word for word, tag in self.get_pos_tags())
+        else:
+            return nltk.FreqDist(self.get_pos_tags())

@@ -1,4 +1,5 @@
 import os
+import re
 import argparse
 import lyricsgenius
 from collections import Counter
@@ -6,7 +7,8 @@ from base.environment import env
 from tk.track import Track
 
 logger = env.get_logger(__name__)
-HEADER = ['Artist', 'Album', 'Song', 'Year', 'Lyric Count', 'Sentiment Score']
+HEADER = ['Artist', 'Album', 'Song', 'Year', 'Lyric Count', 'Sentiment Score', 'Word', 'POS']
+IS_WORD = re.compile(r'\w+')
 
 
 def get_arg_parser():
@@ -27,6 +29,9 @@ def get_args():
 
     return args_parsed
 
+def is_word(word):
+    return IS_WORD.match(word)
+
 
 if __name__ == '__main__':
     args = get_args()
@@ -41,8 +46,17 @@ if __name__ == '__main__':
             logger.info("Found: {}, Limit: {}".format(len(artist.songs), max_results))
 
             for song in artist.songs:
-                track = Track(title=song.title, lyrics=song.lyrics, artist=song.artist, album=song.album, year=song.year)
-                avg_sentiment_score = track.get_average_sentiment_score()
-                lyric_count = len(track)
-                lyric_counter = Counter(track.lyrics.split())
-                outfile.writerow(rowdict=dict(track))
+                if song.lyrics:
+                    track = Track(title=song.title, lyrics=song.lyrics, artist=song.artist, album=song.album, year=song.year)
+                    avg_sentiment_score = track.get_average_sentiment_score()
+                    lyric_count = len(track)
+                    lyric_counter = Counter(track.lyrics.split())
+                    c_words = track.get_most_common()
+                    c_tags = track.get_most_common(tags=True)
+                    tags = c_tags.most_common()
+                    for (word, tag), c in tags:
+                        res = dict(track)
+                        res.update({'Word': word, 'POS': tag})
+                        outfile.writerow(rowdict=res)
+                else:
+                    logger.warning("Song has no lyrics: '{}': '{}' - '{}'".format(song.artist, song.album, song.title))
