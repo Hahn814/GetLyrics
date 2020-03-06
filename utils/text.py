@@ -60,3 +60,11 @@ class Corpus(object):
             return nltk.FreqDist(word for word, tag in self.get_pos_tags())
         else:
             return nltk.FreqDist(self.get_pos_tags())
+
+    def get_sentences(self):
+        for _sent in nltk.sent_tokenize(self.corpus):
+            yield _sent
+
+    def get_words(self):
+        for _w in nltk.word_tokenize(self.corpus):
+            yield _w
